@@ -19,6 +19,7 @@
                     <AuthorizeView>
                         <Authorized>
                             <Button Color="ButtonColor.Primary" @onclick="() => EditCategory(category)" Style="margin-right: 2px">Update </Button>             
+                            <Button Color="ButtonColor.Primary" @onclick="() => DeleteCategory(category.Id)" Style="margin-right: 2px">Delete </Button>             
                         </Authorized>
                     </AuthorizeView>
                 </td>
