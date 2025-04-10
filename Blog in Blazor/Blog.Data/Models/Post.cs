@@ -15,7 +15,7 @@ namespace Blog.Data.Models
 
         public DateTime CreatedDate { get; set; }
 
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public string CreatedBy { get; set; }
 
