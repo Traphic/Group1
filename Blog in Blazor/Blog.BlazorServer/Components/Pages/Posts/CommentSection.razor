@@ -31,16 +31,32 @@
         }
         else
         {
-        <p>No comments yet.</p>
+            <p>No comments yet.</p>
         }
     </div>
     <div class="new-comment mb-3">
-         <AuthorizeView>
-             <Authorized>
+        <AuthorizeView>
+            <Authorized>
                 <EditForm Context="formContext" Model="@CommentModel" OnValidSubmit="AddComment">
                     <div class="comment-form">
                         <DataAnnotationsValidator />
                         <div>
+                            <fieldset>
+                                <InputRadioGroup @bind-Value="@CommentModel.IsPositiveReaction">
+                                    <div>
+                                        <label>
+                                            <InputRadio @onchange="() => LikePost()" Value="true" />
+                                            Like
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <InputRadio @onchange="() => LikePost()" Value="false" />
+                                            Dislike
+                                        </label>
+                                    </div>
+                                </InputRadioGroup>
+                            </fieldset>
                             <label for="commentText" class="form-label"> Add a Comment <span style="color: red;">*</span></label>
                             <InputTextArea id="commentText" class="form-control" @bind-Value="@CommentModel.Text" />
                             <ValidationMessage For="@(() => CommentModel.Text)" />
@@ -48,11 +64,11 @@
                         <button type="submit" class="btn btn-primary" disabled="@(!formContext.Validate() || !formContext.IsModified())">Save</button>
                     </div>
                 </EditForm>
-             </Authorized>
-             <NotAuthorized>
+            </Authorized>
+            <NotAuthorized>
                 <p><em>Login to the website to be able to leave comments.</em></p>
-             </NotAuthorized>
-         </AuthorizeView>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </div>
 <SharedModal @ref="deleteConfirmModal" Title="Are you sure you want to delete the comment?" OnConfirmClick="DeleteComment">
@@ -73,6 +89,18 @@
     private SharedModal deleteConfirmModal { get; set; }
 
     CommentViewModel commentToDelete = new CommentViewModel();
+
+    private async Task LikePost()
+    {
+        CommentModel.IsPositiveReaction = true;
+        var response = await CommentClient.AddAsync(CommentModel);
+    }
+
+    private async Task DislikePost()
+    {
+        CommentModel.IsPositiveReaction = false;
+        var response = await CommentClient.AddAsync(CommentModel);
+    }
 
     private async Task HandleDeleteComment(CommentViewModel comment)
     {

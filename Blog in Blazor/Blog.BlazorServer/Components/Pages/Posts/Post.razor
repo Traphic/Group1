@@ -62,6 +62,16 @@
             }
         </div>
         <CommentSection Comments="@LoadedPost.CommentDTOs" PostId="@LoadedPost.Id" />
+        <div>
+            <form>
+                <fieldset>
+                    <label for="like">Like</label>
+                    <input type="radio" id="like" value="like" name="group1"/>
+                    <label for="dislike">Dislike</label>
+                    <input type="radio" id="dislike" value="dislike" name="group1" />
+                </fieldset>
+            </form>
+        </div>
     </div>
     <PostModal @ref="postModal" PostModel="LoadedPost" IsEdit="true" OnSave="HandleEditPost" />
     <SharedModal @ref="deleteConfirmModal" Title="Are you sure you want to delete the post?" OnConfirmClick="DeletePost">
