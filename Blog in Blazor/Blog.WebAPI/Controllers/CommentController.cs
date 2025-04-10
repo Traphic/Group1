@@ -18,6 +18,13 @@ namespace Blog.WebAPI.Controllers
             _commentService = commentService;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllCommentsByPostId(int id)
+        {
+            var comments = await _commentService.GetAllAsync(id);
+            return Ok(comments);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CommentDTO commentDTO)
         {

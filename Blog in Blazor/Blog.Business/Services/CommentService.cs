@@ -3,6 +3,7 @@ using Blog.Business.DTOs;
 using Blog.Business.Interfaces;
 using Blog.Data.Data;
 using Blog.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Business.Services
 {
@@ -15,6 +16,14 @@ namespace Blog.Business.Services
         {
             _dbContext = dbContext;
             _mapper = mapper;
+        }
+        public async Task<List<CommentDTO>> GetAllAsync(int postId)
+        {
+            var comments = await _dbContext.Comments
+                .Where(c => c.PostId == postId)
+                .ToListAsync();
+
+            return _mapper.Map<List<CommentDTO>>(comments);
         }
 
         public async Task CreateAsync(CommentDTO commentDTO)
