@@ -1,4 +1,5 @@
-﻿using Blog.BlazorServer.Clients.Interfaces;
+﻿using System.Threading.Tasks;
+using Blog.BlazorServer.Clients.Interfaces;
 using Blog.BlazorServer.ViewModels;
 
 namespace Blog.BlazorServer.Clients
@@ -6,11 +7,18 @@ namespace Blog.BlazorServer.Clients
     public class CommentClient : ICommentClient
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "api/comment"; 
+        private const string BaseUrl = "api/comment";
 
         public CommentClient(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
+
+        public async Task<List<CommentViewModel>> GetAllByPostIdAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"{BaseUrl}/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<CommentViewModel>>();
         }
 
         public async Task<HttpResponseMessage> AddAsync(CommentViewModel comment) => await _httpClient.PostAsJsonAsync(BaseUrl, comment);
